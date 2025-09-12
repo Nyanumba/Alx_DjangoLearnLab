@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import permission_required
 from .models import Book
+from django.http import HttpResponse
 from django import forms 
+from .forms import ExampleForm
 
 class SearchForm(forms.Form):
     query = forms.CharField(max_length=100)
@@ -14,6 +16,23 @@ def search_books(request):
         # Using ORM to avoid SQL injection
         books = Book.objects.filter(title__icontains=query)
     return render(request, "bookshelf/book_list.html", {"books": books, "form": form})
+
+# ✅ Example form view with CSRF protection
+def example_form_view(request):
+    if request.method == "POST":
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            # Safely access validated user input
+            name = form.cleaned_data["name"]
+            email = form.cleaned_data["email"]
+            message = form.cleaned_data["message"]
+
+            # For now, just return a response (in real apps: save to DB or send email)
+            return HttpResponse(f"Thanks {name}, we received your message!")
+    else:
+        form = ExampleForm()
+
+    return render(request, "bookshelf/form_example.html", {"form": form})
 
 @permission_required('bookshelf.can_view', raise_exception=True)
 def book_list(request):
