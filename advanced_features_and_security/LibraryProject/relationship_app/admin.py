@@ -1,5 +1,7 @@
-# relationship_app/admin.py
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
 from .models import UserProfile
 
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ("user",)
