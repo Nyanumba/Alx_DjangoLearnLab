@@ -73,25 +73,16 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(username, email, date_of_birth, profile_photo, password, **extra_fields)
 
 
-class CustomUser(AbstractUser):
-    date_of_birth = models.DateField(null=True, blank=True)
-    profile_photo = models.ImageField(upload_to="profile_photos/", null=True, blank=True)
 
-    objects = CustomUserManager()
-
-    def __str__(self):
-        return self.username
 
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
     ROLE_CHOICES = [
         ("Admin", "Admin"),
         ("Librarian", "Librarian"),
         ("Member", "Member"),
     ]
-
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="Member")
 
     def __str__(self):
