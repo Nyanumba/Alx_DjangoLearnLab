@@ -1,7 +1,19 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import permission_required
 from .models import Book
+from django import forms 
 
+class SearchForm(forms.Form):
+    query = forms.CharField(max_length=100)
+
+def search_books(request):
+    form = SearchForm(request.GET or None)
+    books = []
+    if form.is_valid():
+        query = form.cleaned_data["query"]
+        # Using ORM to avoid SQL injection
+        books = Book.objects.filter(title__icontains=query)
+    return render(request, "bookshelf/book_list.html", {"books": books, "form": form})
 
 @permission_required('bookshelf.can_view', raise_exception=True)
 def book_list(request):
