@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookshelf',
     'relationship_app',
-     'csp',
+   
 ]
 
 MIDDLEWARE = [
@@ -115,6 +115,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#security settings
+
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 3153600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+# Make Django aware of HTTPS behind proxy
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
