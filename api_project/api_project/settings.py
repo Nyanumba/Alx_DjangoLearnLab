@@ -103,6 +103,15 @@ USE_I18N = True
 
 USE_TZ = True
 APPEND_SLASH = False
+# Authentication settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # Default: require login
+    ],
+}
 
 
 
