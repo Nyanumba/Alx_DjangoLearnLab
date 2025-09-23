@@ -25,3 +25,12 @@ The `BookListView` supports advanced query parameters:
 - **Ordering**  
   Example: `/books/?ordering=publication_year`  
   Example: `/books/?ordering=-title` (descending)
+
+
+### Running Tests
+
+We use Django’s built-in test framework for API testing.
+
+Run all tests:
+```bash
+python manage.py test api
