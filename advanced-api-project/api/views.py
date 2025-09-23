@@ -2,34 +2,36 @@ from rest_framework import generics, permissions
 from .models import Book
 from .serializers import BookSerializer
 
-
-# List all books or create a new book
-class BookListCreateView(generics.ListCreateAPIView):
-    """
-    GET: Retrieve all books.
-    POST: Create a new book (authenticated users only).
-    """
+# List all books (anyone can view)
+class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-
-    # Allow anyone to view, but restrict creation to authenticated users
-    def get_permissions(self):
-        if self.request.method == 'POST':
-            return [permissions.IsAuthenticated()]
-        return [permissions.AllowAny()]
+    permission_classes = [permissions.AllowAny]
 
 
-# Retrieve, update, or delete a single book
-class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    GET: Retrieve a book by ID.
-    PUT/PATCH: Update a book (authenticated users only).
-    DELETE: Delete a book (authenticated users only).
-    """
+# Retrieve a single book by ID (anyone can view)
+class BookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = [permissions.AllowAny]
 
-    def get_permissions(self):
-        if self.request.method in ['PUT', 'PATCH', 'DELETE']:
-            return [permissions.IsAuthenticated()]
-        return [permissions.AllowAny()]
+
+# Create a new book (authenticated users only)
+class BookCreateView(generics.CreateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+# Update an existing book (authenticated users only)
+class BookUpdateView(generics.UpdateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+# Delete a book (authenticated users only)
+class BookDeleteView(generics.DestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticated]
