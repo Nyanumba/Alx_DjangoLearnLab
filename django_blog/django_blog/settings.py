@@ -4,6 +4,11 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Sites & auth redirect settings
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "/profile/"   # or "/"
+LOGOUT_REDIRECT_URL = "/login/"
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -44,8 +49,8 @@ ROOT_URLCONF = 'django_blog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'blog/templates'],
-        'APP_DIRS': True,
+        'DIRS': [],   # leave empty unless you have a global templates folder
+        'APP_DIRS': True,   # this must be True
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -57,6 +62,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'django_blog.wsgi.application'
 
 
@@ -67,7 +73,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'django_blog_db',
-        'USER': 'tony',
+        'USER': 'postgres',
         'PASSWORD': '2002',
         'HOST': 'localhost',
         'PORT': '5432',

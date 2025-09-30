@@ -1,0 +1,20 @@
+<!-- blog/templates/blog/profile.html -->
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+<h2>Profile</h2>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <h3>Account</h3>
+  {{ u_form.as_p }}
+
+  <h3>Profile</h3>
+  {% if request.user.profile.avatar %}
+    <img src="{{ request.user.profile.avatar.url }}" alt="avatar" width="120" />
+  {% endif %}
+  {{ p_form.as_p }}
+
+  <button type="submit">Update Profile</button>
+</form>
+{% endblock %}
