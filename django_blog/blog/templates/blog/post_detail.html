@@ -10,5 +10,34 @@
     <a href="{% url 'blog:post_delete' object.pk %}">Delete</a>
   {% endif %}
 </article>
+<hr/>
+
+<section id="comments">
+  <h3>Comments ({{ post.comments.count }})</h3>
+
+  {% for comment in post.comments.all %}
+    <div class="comment" id="comment-{{ comment.pk }}">
+      <p>
+        <strong>{{ comment.author.username }}</strong>
+        <small>{{ comment.created_at|date:"F j, Y, g:i a" }}</small>
+      </p>
+      <div>{{ comment.content|linebreaks }}</div>
+
+      {% if request.user == comment.author or request.user.is_superuser %}
+        <p>
+          <a href="{% url 'blog:comment_edit' comment.pk %}">Edit</a> |
+          <a href="{% url 'blog:comment_delete' comment.pk %}">Delete</a>
+        </p>
+      {% endif %}
+    </div>
+    <hr/>
+  {% empty %}
+    <p>No comments yet — be the first to comment.</p>
+  {% endfor %}
+
+  {# Inline comment form #}
+  {% include "blog/_comment_form_inline.html" with comment_form=comment_form %}
+</section>
+
 <a href="{% url 'blog:post_list' %}">← Back to all posts</a>
 {% endblock %}

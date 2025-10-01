@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+from django.conf import settings
 
 
 # --- Blog Post (primary model) ---
@@ -74,3 +75,29 @@ class BlogPost(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:post_detail', kwargs={'pk': self.pk})
+
+#comment model
+class Comment(models.Model):
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['created_at']  # oldest first
+
+    def __str__(self):
+        return f'Comment by {self.author} on {self.post}'
+
+    def get_edit_url(self):
+        from django.urls import reverse
+        return reverse('blog:comment_edit', kwargs={'pk': self.pk})
+
+    def get_delete_url(self):
+        from django.urls import reverse
+        return reverse('blog:comment_delete', kwargs={'pk': self.pk})
