@@ -10,8 +10,8 @@ from .views import (
     CommentCreateView,
     CommentUpdateView,
     CommentDeleteView,
-    TaggedPostListView,   # new
-    SearchResultsView     # new
+    PostByTagListView,     # renamed for consistency
+    SearchResultsView
 )
 
 app_name = "blog"
@@ -36,6 +36,6 @@ urlpatterns = [
     path("comment/<int:pk>/delete/", CommentDeleteView.as_view(), name="comment_delete"),
 
     # 🏷️ Tagging and Search
-    path("tags/<str:tag_name>/", TaggedPostListView.as_view(), name="posts_by_tag"),
+    path("tags/<slug:tag_slug>/", PostByTagListView.as_view(), name="posts_by_tag"),
     path("search/", SearchResultsView.as_view(), name="search_results"),
 ]
