@@ -1,0 +1,21 @@
+<!-- search_results.html -->
+<h2>Search Results for "{{ request.GET.q }}"</h2>
+
+{% if posts %}
+  {% for post in posts %}
+    <div class="post">
+      <h3><a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a></h3>
+      <p>{{ post.content|truncatewords:30 }}</p>
+
+      <p><strong>Tags:</strong>
+        {% for tag in post.tags.all %}
+          <a href="{% url 'blog:posts_by_tag' tag.name %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+        {% empty %}
+          No tags.
+        {% endfor %}
+      </p>
+    </div>
+  {% endfor %}
+{% else %}
+  <p>No posts match your search query.</p>
+{% endif %}

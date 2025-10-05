@@ -1,0 +1,11 @@
+<!-- posts_by_tag.html -->
+<h2>Posts tagged with "{{ view.kwargs.tag_name }}"</h2>
+
+{% for post in posts %}
+  <div class="post">
+    <h3><a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a></h3>
+    <p>{{ post.content|truncatewords:25 }}</p>
+  </div>
+{% empty %}
+  <p>No posts found for this tag.</p>
+{% endfor %}

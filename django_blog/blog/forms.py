@@ -42,9 +42,20 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ["bio", "avatar"]
 
 class PostForm(forms.ModelForm):
+    tags = forms.CharField(required=False, help_text='Comma-separated tags', widget=forms.TextInput())
     class Meta:
         model = Post
-        fields = ['title', 'content']  # published_date and author are auto-set
+        fields = ['title', 'content', 'tags']  # published_date and author are auto-set
+        
+    def save(self, commit=True):
+        # Save instance first, then set tags
+        instance = super().save(commit=False)
+        if commit:
+            instance.save()
+        tag_string = self.cleaned_data.get('tags', '')
+        # taggit can accept a comma-separated string
+        instance.tags.set([t.strip() for t in tag_string.split(',') if t.strip()])
+        return instance
         
 #comment form
 class CommentForm(forms.ModelForm):

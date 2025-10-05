@@ -5,17 +5,26 @@
   <p>{{ object.content }}</p>
   <p><small>by {{ object.author.username }} on {{ object.published_date }}</small></p>
 
+  <!-- 🏷 Tags Section -->
+  <p><strong>Tags:</strong>
+    {% for tag in object.tags.all %}
+      <a href="{% url 'blog:posts_by_tag' tag.name %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+    {% empty %}
+      No tags assigned.
+    {% endfor %}
+  </p>
+
   {% if user == object.author %}
-    <a href="{% url 'blog:post_edit' object.pk %}">Edit</a> |
+    <a href="{% url 'blog:post_update' object.pk %}">Edit</a> |
     <a href="{% url 'blog:post_delete' object.pk %}">Delete</a>
   {% endif %}
 </article>
 <hr/>
 
 <section id="comments">
-  <h3>Comments ({{ post.comments.count }})</h3>
+  <h3>Comments ({{ object.comments.count }})</h3>
 
-  {% for comment in post.comments.all %}
+  {% for comment in object.comments.all %}
     <div class="comment" id="comment-{{ comment.pk }}">
       <p>
         <strong>{{ comment.author.username }}</strong>
@@ -25,7 +34,7 @@
 
       {% if request.user == comment.author or request.user.is_superuser %}
         <p>
-          <a href="{% url 'blog:comment_edit' comment.pk %}">Edit</a> |
+          <a href="{% url 'blog:comment_update' comment.pk %}">Edit</a> |
           <a href="{% url 'blog:comment_delete' comment.pk %}">Delete</a>
         </p>
       {% endif %}
@@ -35,7 +44,7 @@
     <p>No comments yet — be the first to comment.</p>
   {% endfor %}
 
-  {# Inline comment form #}
+  <!-- Inline comment form -->
   {% include "blog/_comment_form_inline.html" with comment_form=comment_form %}
 </section>
 
